@@ -6,6 +6,8 @@ TEMPLATE = app
 TARGET = Fast5-Studio
 INCLUDEPATH += .
 QT += widgets
+CONFIG += console
 # Input
-HEADERS += mainwindow.h
-SOURCES += fast5studio.cpp mainwindow.cpp
+HEADERS += mainwindow.h fast5files.h
+LIBS += -lhdf5 -L/usr/lib/x86_64-linux-gnu
+SOURCES += fast5studio.cpp mainwindow.cpp fast5files.cpp

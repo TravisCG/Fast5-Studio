@@ -1,6 +1,7 @@
 #ifndef MAINWINDOW
 #define MAINWINDOW
 #include <QMainWindow>
+#include "fast5files.h"
 
 class QMenu;
 
@@ -10,17 +11,21 @@ public:
 	MainWindow();
 private slots:
 	void openFast5();
+	void saveFasta();
 	void exit();
 	void about();
 private:
 	QMenu *fileMenu;
 	QAction *openAction;
 	QAction *exitAction;
+	QAction *saveFastaAction;
 
 	QMenu *statMenu;
 
 	QMenu *helpMenu;
 	QAction *aboutAction;
+
+	Fast5Files *fast5files;
 
 	void createMenu();
 	void createActions();
