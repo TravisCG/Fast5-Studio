@@ -13,6 +13,7 @@ public:
 	void convertFasta(QString outfile);
 private:
 	QVector<QString> filenames;
+	void getFastq(hid_t dataset);
 };
 
 #endif

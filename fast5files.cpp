@@ -24,10 +24,43 @@ void Fast5Files::readDir(QString dir){
 	}
 }
 
+void Fast5Files::getFastq(hid_t dataset){
+	hid_t dt;
+	size_t size;
+	char *data;
+
+	dt   = H5Dget_type(dataset);
+	size = H5Tget_size(dt);
+	data = (char*)malloc(size);
+	H5Dread(dataset, H5T_C_S1, H5S_ALL, H5S_ALL, H5P_DEFAULT, data);
+	qDebug() << data;
+	free(data);
+	H5Dclose(dataset);
+}
+
 void Fast5Files::convertFasta(QString outfile){
 	hid_t fast5id;
+	hid_t fastq;
 
-	fast5id = H5Fopen(filenames.at(0).toLatin1().data(), H5F_ACC_RDONLY, H5P_DEFAULT);
-	H5Fclose(fast5id);
+	for(int i = 0; i < filenames.size(); ++i){
+		fast5id = H5Fopen(filenames.at(i).toLatin1().data(), H5F_ACC_RDONLY, H5P_DEFAULT);
+
+		fastq   = H5Dopen2(fast5id, "/Analyses/Basecall_2D_000/BaseCalled_template/Fastq", H5P_DEFAULT);
+		if(fastq > 0){
+			getFastq(fastq);
+		}
+
+		fastq = H5Dopen2(fast5id, "/Analyses/Basecall_2D_000/BaseCalled_complement/Fastq", H5P_DEFAULT);
+		if(fastq > 0){
+			getFastq(fastq);
+		}
+
+		fastq    = H5Dopen2(fast5id, "/Analyses/Basecall_2D_000/BaseCalled_2D/Fastq", H5P_DEFAULT);
+		if(fastq > 0){
+			getFastq(fastq);
+		}
+
+		H5Fclose(fast5id);
+	}
 }
 
